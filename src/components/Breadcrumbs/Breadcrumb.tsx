@@ -9,11 +9,6 @@ const Breadcrumb = ({ pageName }: BreadcrumbProps) => {
 
       <nav>
         <ol className="flex items-center gap-2">
-          <li>
-            <Link className="font-medium" href="/">
-              Dashboard /
-            </Link>
-          </li>
           {pageName.map((name: string, index: number) =>
             index !== pageName.length - 1 ? (
               <Link key={index} className="font-medium" href={`/${name.toLocaleLowerCase().replaceAll(' ', '-')}`}>

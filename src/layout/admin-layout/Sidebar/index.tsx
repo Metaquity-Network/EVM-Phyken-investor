@@ -1,21 +1,12 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import {
-  FaHome,
-  FaDatabase,
-  FaWallet,
-  FaIdCardAlt,
-  FaCog,
-  FaSignOutAlt,
-  FaQuestionCircle,
-  FaArrowLeft,
-  FaExchangeAlt,
-} from 'react-icons/fa';
+import { FaDatabase, FaSignOutAlt, FaArrowLeft } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { useAccount, useDisconnect } from 'wagmi';
+import { IconType } from 'react-icons/lib';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -23,56 +14,26 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-  const pathname = usePathname();
+  const router = useRouter();
+  const { pathname } = router;
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-  const router = useRouter();
+  const { disconnect } = useDisconnect();
+  const { isConnected } = useAccount();
 
   const storedSidebarExpanded = 'true';
 
   const sidebarMenu = [
     {
-      name: 'My Dashboard',
-      icon: 'FaHome',
-      pathname: '/',
-    },
-    {
       name: 'Opportunities',
       icon: 'FaDatabase',
       pathname: '/assets',
-    },
-    {
-      name: 'My Investments',
-      icon: 'FaWallet',
-      pathname: '/wallet',
-    },
-    {
-      name: 'Impact Dashboard',
-      icon: 'FaIdCardAlt',
-      pathname: '/upload-license',
-    },
-    {
-      name: 'Manage funds',
-      icon: 'FaExchangeAlt',
-      pathname: '/transactions',
-      notification: 2,
+      notification: 1,
     },
   ];
 
-  interface IconComponents {
-    [key: string]: React.ComponentType<any>;
-  }
-
-  const iconComponents: IconComponents = {
-    FaHome,
+  const iconComponents: { [key: string]: IconType } = {
     FaDatabase,
-    FaWallet,
-    FaIdCardAlt,
-    FaCog,
-    FaSignOutAlt,
-    FaQuestionCircle,
-    FaArrowLeft,
-    FaExchangeAlt,
   };
 
   const FaIcon = ({ icon }: { icon: string }) => {
@@ -98,7 +59,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     };
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
-  });
+  }, [sidebarOpen, setSidebarOpen]);
 
   // close if the esc key is pressed
   useEffect(() => {
@@ -108,7 +69,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     };
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
-  });
+  }, [sidebarOpen, setSidebarOpen]);
 
   useEffect(() => {
     localStorage.setItem('sidebar-expanded', sidebarExpanded.toString());
@@ -122,6 +83,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const logout = async () => {
     localStorage.clear();
     sessionStorage.clear();
+    await disconnect();
     const res = await axios.post('/api/auth/logout');
     if (res.status === 200) {
       router.push('/login');
@@ -131,11 +93,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-primary text-white duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-primary text-white duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 rounded-br-2xl rounded-tr-2xl ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5 re">
+      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/">
           <img width={45} height={32} src={'/images/logo/logo.png'} alt="Logo" />
         </Link>
@@ -156,13 +118,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <div>
             <ul className="mb-6 flex flex-col gap-1.5">
               {sidebarMenu.map((menu, i) => {
+                const isActive = pathname.startsWith(menu.pathname);
                 return (
                   <li key={i}>
                     <Link
                       href={menu.pathname}
-                      className={`group relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:rounded-full dark:hover:bg-primary ${
-                        pathname === menu.pathname &&
-                        'bg-white text-primary dark:bg-meta-4 dark:text-white rounded-full dark:hover:bg-primary'
+                      className={`group relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-secondary hover:rounded-full dark:hover:bg-primary ${
+                        isActive &&
+                        'bg-white text-primary dark:bg-meta-4 dark:text-white rounded-full dark:hover:bg-primary hover:text-black'
                       }`}
                     >
                       <FaIcon icon={menu.icon} />
@@ -182,31 +145,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <div className="py-25">
             <ul className="mb-6 flex flex-col gap-1.5">
               <li>
-                <Link
-                  href="/settings"
-                  className={`group relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:rounded-full dark:hover:bg-meta-4`}
-                >
-                  <FaCog />
-                  Settings
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/support"
-                  className={`group relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:rounded-full dark:hover:bg-meta-4`}
-                >
-                  <FaQuestionCircle />
-                  Support
-                </Link>
-              </li>
-              <li>
-                <button
-                  onClick={logout}
-                  className={`group relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:rounded-full dark:hover:bg-meta-4`}
-                >
-                  <FaSignOutAlt />
-                  Logout
-                </button>
+                {isConnected ? (
+                  <button
+                    onClick={logout}
+                    className="group relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:rounded-full dark:hover:bg-meta-4"
+                  >
+                    <FaSignOutAlt />
+                    Logout
+                  </button>
+                ) : null}
               </li>
             </ul>
           </div>

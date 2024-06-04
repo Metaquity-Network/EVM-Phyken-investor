@@ -1,20 +1,26 @@
-export type CardTwoItemProps = {
-  imageSrc?: string;
-  name?: string;
-  count?: string | number;
-  url?: string;
+export type AssetOverview = {
+  developerDetails: string;
+  assetOffering: string;
+  target: string | number;
+  proceeds: string;
+};
+
+export type AssetDetails = {
+  issuer: {
+    about: string;
+    contractRenew: string;
+    maintained: string;
+  };
 };
 
 export type LiveAssetCardProps = {
   id: string;
-  image: string;
-  title: string;
-  description: string;
-  tags: string[];
-  totalValue: number;
-  lockedValue: number;
-  fixedRate: number;
-  lockPeriod: number;
-  minimumInvestment: number;
-  dealValue: number;
+  assetName: string;
+  assetDescription: string;
+  companyName: string;
+  assetType: string;
+  assetClassType: string;
+  companyWebsite: string;
+  assetOverview: AssetOverview;
+  assetDetails: AssetDetails;
 };
