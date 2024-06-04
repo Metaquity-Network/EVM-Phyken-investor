@@ -3,6 +3,7 @@ import DarkModeSwitcher from './DarkModeSwitcher';
 import DropdownUser from './DropdownUser';
 import Image from 'next/image';
 import { FaSearch } from 'react-icons/fa';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 const Header = (props: { sidebarOpen: string | boolean | undefined; setSidebarOpen: (arg0: boolean) => void }) => {
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
@@ -75,7 +76,7 @@ const Header = (props: { sidebarOpen: string | boolean | undefined; setSidebarOp
           <ul className="flex items-center gap-2 2xsm:gap-4">
             <DarkModeSwitcher />
           </ul>
-          <DropdownUser />
+          <ConnectButton />
         </div>
       </div>
     </header>

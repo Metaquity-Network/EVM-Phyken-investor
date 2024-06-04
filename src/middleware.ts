@@ -1,40 +1,17 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-type Middleware = (request: NextRequest) => NextResponse;
-
-const redirectIfAuthenticated: Middleware = (request) => {
-  const authSession = request.cookies.get('server-auth')?.value;
-
-  if (authSession) {
-    return NextResponse.redirect(new URL('/', request.url));
-  }
-
-  return NextResponse.next();
-};
-
-const authenticated: Middleware = (request) => {
-  const authSession = request.cookies.get('server-auth')?.value;
-  if (!authSession) {
-    const response = NextResponse.redirect(new URL('/login', request.url));
-    response.cookies.set({
-      name: 'redirect',
-      value: request.url,
-    });
-    return response;
-  }
-
-  return NextResponse.next();
-};
-
 export default function middleware(request: NextRequest) {
-  // Uncomment if you want to redirect if authenticated.
-  if (['/login'].includes(request.nextUrl.pathname)) {
-    return redirectIfAuthenticated(request);
-  }
+  const url = request.nextUrl.clone();
+  const pathname = url.pathname;
 
-  if (['/', '/dashboard', '/fractionalize-asset', '/user'].includes(request.nextUrl.pathname)) {
-    return authenticated(request);
+  // Define your known routes
+  const knownRoutes = ['/', '/dashboard', '/assets'];
+
+  // If the request path is not in the known routes and is not a file or API route, redirect to home
+  if (!knownRoutes.includes(pathname) && !pathname.startsWith('/_next') && !pathname.startsWith('/api')) {
+    url.pathname = '/';
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
