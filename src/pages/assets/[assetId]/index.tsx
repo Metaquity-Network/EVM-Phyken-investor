@@ -8,6 +8,8 @@ import { useRouter } from 'next/router';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import ProposedOffering from '@/src/components/assets/proposedOffering';
 import Link from 'next/link';
+import { useAccount } from 'wagmi';
+import { useToast } from '@/src/hooks/useToast';
 
 interface TagProps {
   label: string;
@@ -45,12 +47,22 @@ const Tag = ({ label, color, icon, link }: TagProps) => {
 const FractionalizeAsset: React.FC = () => {
   const router = useRouter();
   const [openTab, setOpenTab] = useState(1);
+  const { isConnected } = useAccount();
+  const { showToast } = useToast();
   const activeClasses = 'bg-primary text-white hover:opacity-100';
   const inactiveClasses = 'bg-gray dark:bg-meta-4 text-black dark:text-white';
 
   useEffect(() => {
     console.log(router.query.assetId);
   });
+
+  const interested = () => {
+    if (isConnected) {
+      router.push('/whitelist');
+    } else {
+      showToast('Please connect your wallet', { type: 'error' });
+    }
+  };
 
   return (
     <>
@@ -175,7 +187,10 @@ const FractionalizeAsset: React.FC = () => {
               <div className="sticky top-25">
                 <ProposedOffering />
                 <div className="p-6 text-center mt-4">
-                  <button className="bg-primary text-white py-2 px-4 rounded-lg mb-2 w-full h-15 font-bold">
+                  <button
+                    className="bg-primary text-white py-2 px-4 rounded-lg mb-2 w-full h-15 font-bold"
+                    onClick={interested}
+                  >
                     Express Interest in This Offering
                   </button>
                   <p>Get in line!</p>
