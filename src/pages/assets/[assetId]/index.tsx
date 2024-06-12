@@ -101,7 +101,7 @@ const FractionalizeAsset: React.FC = () => {
             <div className="flex-1 lg:mr-4">
               <div className="flex mb-7.5 2xsm:flex-col-3 2xsm:w-[45%] md:flex-row gap-1 pb-5 dark:border-strokedark">
                 <Link
-                  href=""
+                  href="#"
                   className={`rounded-full py-3 px-3 text-sm font-medium hover:bg-primary hover:opacity-80 hover:text-white dark:hover:bg-primary md:text-base lg:px-6 ${
                     openTab === 1 ? activeClasses : inactiveClasses
                   }`}
@@ -110,7 +110,7 @@ const FractionalizeAsset: React.FC = () => {
                   Overview
                 </Link>
                 <Link
-                  href=""
+                  href="#"
                   className={`rounded-full py-3 px-3 text-sm font-medium hover:bg-primary hover:opacity-80 hover:text-white dark:hover:bg-primary md:text-base lg:px-6 ${
                     openTab === 2 ? activeClasses : inactiveClasses
                   }`}
@@ -119,7 +119,7 @@ const FractionalizeAsset: React.FC = () => {
                   Asset Details
                 </Link>
                 <Link
-                  href=""
+                  href="#"
                   className={`rounded-full py-3 px-3 text-sm font-medium hover:bg-primary hover:opacity-80 hover:text-white dark:hover:bg-primary md:text-base lg:px-6 ${
                     openTab === 3 ? activeClasses : inactiveClasses
                   }`}
@@ -149,38 +149,38 @@ const FractionalizeAsset: React.FC = () => {
                   </div>
                 </div>
                 <div className={`leading-relaxed ${openTab === 2 ? 'block' : 'hidden'}`}>
-                  <div className="grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-2">
-                    <span>No active sdfsdf to invest</span>
+                  <div className="">
+                    <h2 className="text-2xl font-bold mb-4">Asset Details</h2>
+                    <h4 className="text-xl font-medium mb-4">About</h4>
+
+                    <h4 className="text-xl font-medium mb-4">Issuer</h4>
+                    <span>{asset.assetDetails.issuer.about}</span>
+                    <br />
+                    <h4 className="text-xl font-medium mb-4 pt-4"> Contracted Revenue</h4>
+                    <div
+                      className="html-content"
+                      dangerouslySetInnerHTML={{ __html: asset.assetDetails.issuer.contractRenew }}
+                    ></div>
+                    <br />
+                    <h4 className="text-xl font-medium mb-4 pt-4"> Expertly Maintained and Insured</h4>
+                    <div
+                      className="html-content"
+                      dangerouslySetInnerHTML={{ __html: asset.assetDetails.issuer.maintained }}
+                    ></div>
                   </div>
                 </div>
                 <div className={`leading-relaxed ${openTab === 3 ? 'block' : 'hidden'}`}>
-                  <div>
-                    <div className="p-6 bg-gray-2 rounded-2xl shadow-md w-full">
-                      <h4 className="text-l font-bold mb-4 pt-4"> Regulatory Disclosure</h4>
-                      <span>This is in preparation of the offering going live. At this time:</span>{' '}
-                      <span>
-                        No money or other consideration is being solicited, and if sent in response, will not be
-                        accepted. No offer to buy the securities can be accepted, and no part of the purchase price can
-                        be received until the offering statement is filed and only through the platform of an
-                        intermediary (funding portal or broker-dealer). A person's indication of interest includes no
-                        obligation or commitment of any kind.
-                      </span>
-                      <span>
-                        Past performance may not be indicative of future results. Different types of investments involve
-                        varying degrees of risk, and there can be no assurance that the future performance of any
-                        specific investment, investment strategy, or product made reference to directly or indirectly in
-                        this offering will be profitable, equal to any corresponding indicated historical performance
-                        level(s), or be suitable for your portfolio. Due to various factors, including changing market
-                        conditions, the content may no longer be reflective of current opinions or positions. Moreover,
-                        you should not assume that any discussion or information contained in this offering page serves
-                        as the receipt of, or as a substitute for, personalized investment advice from Plural Everything
-                        Inc. or any of its Subsidiaries, Solaris Energy Inc. or any of its Subsidiaries, Solaris
-                        Investment Group LLC or any of its Subsidiaries, Texture Capital, or any other affiliated
-                        entities or partners of the aforementioned entities. To the extent that a reader has any
-                        questions regarding the applicability of any specific issue discussed above to their individual
-                        situation, they are encouraged to consult with the professional advisor of their choosing.
-                      </span>
-                    </div>
+                  <div className="">
+                    <h2 className="text-2xl font-bold mb-4">Additional Details</h2>
+                    <h4 className="text-xl font-medium mb-4">Secondary Market</h4>
+                    <span>{asset.assetDetails.secondaryMarket}</span>
+                    <br />
+                    <h4 className="text-xl font-medium mb-4 pt-4">Risk Factors to Consider</h4>
+                    <div
+                      className="html-content"
+                      dangerouslySetInnerHTML={{ __html: asset.assetDetails.riskFactor }}
+                    ></div>
+                    <br />
                   </div>
                 </div>
               </div>
