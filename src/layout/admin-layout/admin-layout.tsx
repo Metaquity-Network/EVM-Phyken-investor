@@ -1,10 +1,56 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren, useState, useEffect } from 'react';
 import Head from 'next/head';
 import Sidebar from '@/src/layout/admin-layout/Sidebar';
 import Header from '@/src/layout/admin-layout/Header';
+import axios from 'axios';
+import { useAccount, useSignMessage } from 'wagmi';
+import { useToast } from '@/src/hooks/useToast';
 
 export default function AdminLayout({ children }: PropsWithChildren) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { address, isConnected } = useAccount();
+  const { data, signMessage } = useSignMessage();
+  const [signature, setSignature] = useState<`0x${string}`>();
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    const authenticate = async () => {
+      if (signature) {
+        try {
+          const response = await axios.post('/api/auth/login', {
+            address: address,
+            signature: signature,
+          });
+
+          if (response.status !== 200) {
+            showToast('Authentication failed', { type: 'error' });
+          } else {
+            showToast('Authentication successful', { type: 'success' });
+          }
+        } catch (error: any) {
+          if (error.response && error.response.data && error.response.data.message) {
+            showToast(`Authentication failed: ${error.response.data.message}`, { type: 'error' });
+          } else {
+            showToast('Authentication failed: An unexpected error occurred', { type: 'error' });
+          }
+        }
+      }
+    };
+    authenticate();
+  }, [signature, address]);
+
+  useEffect(() => {
+    if (isConnected && address && !signature) {
+      const message = `Sign this message to authenticate with Phyken. Address: ${address}`;
+      signMessage({ message });
+    }
+  }, [isConnected, address]);
+
+  useEffect(() => {
+    if (data) {
+      setSignature(data);
+    }
+  }, [data]);
 
   return (
     <>

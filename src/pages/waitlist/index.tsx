@@ -31,15 +31,12 @@ const Waitlist: React.FC = () => {
     try {
       const response = await axios.post('/api/invest/waitlist', data);
       if (response.status === 200) {
-        console.log('Form submitted successfully:', response.data);
         showToast('Your details have been added to the waitlist', { type: 'success' });
         reset();
       } else {
-        console.log('Form submission failed:', response);
         showToast(response.data.message, { type: 'error' });
       }
     } catch (error: any) {
-      console.error('Error submitting form:', error);
       showToast(error.response.data.message, { type: 'error' });
     }
   };

@@ -13,7 +13,6 @@ export default async function handler(req: NextApiRequest, res: any) {
     const data = response.data;
     res.status(200).json(data);
   } catch (error: any) {
-    console.log('error', error.response.data);
     res.status(500).json(error.response.data);
   }
 }

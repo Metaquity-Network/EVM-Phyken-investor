@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import Head from 'next/head';
 import '@rainbow-me/rainbowkit/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider } from 'wagmi';
+import { WagmiProvider, useAccount, useSignMessage } from 'wagmi';
 import { base, polygonMumbai, berachainTestnet, celoAlfajores, xdcTestnet } from 'wagmi/chains';
 import './../../styles/satoshi.css';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
