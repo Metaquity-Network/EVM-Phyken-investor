@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '@/src/layout';
 import Breadcrumb from '@/src/components/Breadcrumbs/Breadcrumb';
 import { useForm } from 'react-hook-form';
@@ -9,17 +9,25 @@ import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/src/hooks/useToast';
 import { ToastContainer } from 'react-toastify';
+import { CountryDropdown } from 'react-country-region-selector';
 
 const Waitlist: React.FC = () => {
   const router = useRouter();
   const { showToast } = useToast();
+  const [country, setCountry] = useState('India');
+
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     reset,
+    setValue,
   } = useForm();
   const { isConnected } = useAccount();
+
+  useEffect(() => {
+    setValue('nationality', country);
+  }, [country]);
 
   useEffect(() => {
     if (!isConnected) {
@@ -55,12 +63,12 @@ const Waitlist: React.FC = () => {
       <Breadcrumb pageName={['Waitlist']} />
       <div className="max-w-3xl mx-auto p-8">
         <h1 className="text-2xl font-bold mb-4">
-          Let Sunshine Valley Solar Farm know you are interested in investing in the Sunshine Valley Solar Farm!
+          Let Rocket Forest Solar Farm know you are interested in investing in the Rocket Forest Solar Farm!
         </h1>
         <p className="mb-4">
-          In preparation for the Sunshine Valley Solar Farm offering, Sunshine Valley Solar Farm is collecting
-          information from potential investors. Let Sunshine Valley Solar Farm know you are interested in investing in
-          the Sunshine Valley Solar Farm to be among the first to know when the offering is live!
+          In preparation for the Rocket Forest Solar Farm offering, Rocket Forest Solar Farm is collecting information
+          from potential investors. Let Rocket Forest Solar Farm know you are interested in investing in the Rocket
+          Forest Solar Farm to be among the first to know when the offering is live!
         </p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
@@ -106,20 +114,20 @@ const Waitlist: React.FC = () => {
               <label htmlFor="nationality" className="block text-gray-700 font-bold mb-2">
                 Your Nationality
               </label>
-              <input
-                id="nationality"
-                type="text"
-                className="w-full p-2 border border-gray-300 rounded-md"
-                {...register('nationality')}
+              <CountryDropdown
+                classes="w-full p-2 border border-gray-300 rounded-md"
+                value={country}
+                onChange={(val) => setCountry(val)}
               />
             </div>
+
             <div>
               <label htmlFor="investmentAmount" className="block text-gray-700 font-bold mb-2">
                 How much would you plan on investing?*
               </label>
               <input
                 id="investmentAmount"
-                type="text"
+                type="number"
                 className="w-full p-2 border border-gray-300 rounded-md"
                 {...register('investmentAmount', { required: 'Investment amount is required' })}
               />

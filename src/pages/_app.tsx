@@ -1,18 +1,17 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
-import { Provider } from 'react-redux';
 import Head from 'next/head';
 import '@rainbow-me/rainbowkit/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider, useAccount, useSignMessage } from 'wagmi';
-import { base, polygonMumbai, berachainTestnet, celoAlfajores, xdcTestnet } from 'wagmi/chains';
+import { WagmiProvider } from 'wagmi';
+import { polygonAmoy } from 'wagmi/chains';
 import './../../styles/satoshi.css';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 
 const config = getDefaultConfig({
   appName: 'Phyken Investor',
   projectId: 'YOUR_PROJECT_ID',
-  chains: [base, polygonMumbai, berachainTestnet, celoAlfajores, xdcTestnet],
+  chains: [polygonAmoy],
   ssr: true,
 });
 

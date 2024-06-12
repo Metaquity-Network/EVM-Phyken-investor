@@ -151,9 +151,7 @@ const FractionalizeAsset: React.FC = () => {
                 <div className={`leading-relaxed ${openTab === 2 ? 'block' : 'hidden'}`}>
                   <div className="">
                     <h2 className="text-2xl font-bold mb-4">Asset Details</h2>
-                    <h4 className="text-xl font-medium mb-4">About</h4>
-
-                    <h4 className="text-xl font-medium mb-4">Issuer</h4>
+                    <h4 className="text-xl font-medium mb-4">About asset issuer</h4>
                     <span>{asset.assetDetails.issuer.about}</span>
                     <br />
                     <h4 className="text-xl font-medium mb-4 pt-4"> Contracted Revenue</h4>
@@ -173,7 +171,10 @@ const FractionalizeAsset: React.FC = () => {
                   <div className="">
                     <h2 className="text-2xl font-bold mb-4">Additional Details</h2>
                     <h4 className="text-xl font-medium mb-4">Secondary Market</h4>
-                    <span>{asset.assetDetails.secondaryMarket}</span>
+                    <div
+                      className="html-content"
+                      dangerouslySetInnerHTML={{ __html: asset.assetDetails.secondaryMarket }}
+                    ></div>
                     <br />
                     <h4 className="text-xl font-medium mb-4 pt-4">Risk Factors to Consider</h4>
                     <div
