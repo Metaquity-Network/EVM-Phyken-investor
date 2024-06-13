@@ -10,7 +10,7 @@ import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 
 const config = getDefaultConfig({
   appName: 'Phyken Investor',
-  projectId: 'YOUR_PROJECT_ID',
+  projectId: 'metaquityApp',
   chains: [polygonAmoy],
   ssr: true,
 });

@@ -5,6 +5,7 @@ import Header from '@/src/layout/admin-layout/Header';
 import axios from 'axios';
 import { useAccount, useSignMessage } from 'wagmi';
 import { useToast } from '@/src/hooks/useToast';
+import { ToastContainer } from 'react-toastify';
 
 export default function AdminLayout({ children }: PropsWithChildren) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -15,17 +16,21 @@ export default function AdminLayout({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const authenticate = async () => {
-      if (signature) {
+      const storedSignature = localStorage.getItem('signature');
+      if (storedSignature) {
+        setSignature(storedSignature as `0x${string}`);
+      } else if (signature) {
         try {
           const response = await axios.post('/api/auth/login', {
             address: address,
             signature: signature,
           });
 
-          if (response.status !== 200) {
-            showToast('Authentication failed', { type: 'error' });
-          } else {
+          if (response.status === 200) {
             showToast('Authentication successful', { type: 'success' });
+            localStorage.setItem('signature', signature);
+          } else {
+            showToast('Authentication failed', { type: 'error' });
           }
         } catch (error: any) {
           if (error.response && error.response.data && error.response.data.message) {
@@ -40,7 +45,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
   }, [signature, address]);
 
   useEffect(() => {
-    if (isConnected && address && !signature) {
+    if (isConnected && address && !signature && !localStorage.getItem('signature')) {
       const message = `Sign this message to authenticate with Phyken. Address: ${address}`;
       signMessage({ message });
     }
@@ -55,7 +60,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
   return (
     <>
       <Head>
-        <title> Metaquity network </title>
+        <title>Metaquity Network</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="shortcut icon" href="assets/login/metaquity-logo.png" />
@@ -72,6 +77,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }
