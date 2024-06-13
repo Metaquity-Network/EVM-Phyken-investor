@@ -24,6 +24,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
           const response = await axios.post('/api/auth/login', {
             address: address,
             signature: signature,
+            userType: 'INVESTOR',
           });
 
           if (response.status === 200) {
