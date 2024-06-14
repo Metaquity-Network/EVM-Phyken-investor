@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useAccount, useDisconnect } from 'wagmi';
 import { IconType } from 'react-icons/lib';
+import Image from 'next/image';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -93,13 +94,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-primary text-white duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 rounded-br-2xl rounded-tr-2xl ${
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-[#7FCE98] text-white duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 rounded-br-2xl rounded-tr-2xl ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <Link href="/">
-          <img width={45} height={32} src={'/images/logo/logo.svg'} alt="Logo" />
+          <img src="https://phyken.network/logo.png" alt="Logo" />
         </Link>
 
         <button
@@ -123,7 +124,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   <li key={i}>
                     <Link
                       href={menu.pathname}
-                      className={`group relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-secondary hover:rounded-full dark:hover:bg-primary ${
+                      className={`group relative flex items-center gap-2.5 px-4 py-2 font-medium text-black hover:text-white duration-300 ease-in-out hover:bg-black hover:rounded-full dark:hover:bg-primary ${
                         isActive &&
                         'bg-white text-primary dark:bg-meta-4 dark:text-white rounded-full dark:hover:bg-primary hover:text-black'
                       }`}

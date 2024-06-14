@@ -3,7 +3,8 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [], // Add the hostname of the external source here
+    path: "/",
+    domains: ['lh3.googleusercontent.com', "phyken.network"], // Add the hostname of the external source here
   },
   env: {
     BASE_URL: process.env.BASE_URL,

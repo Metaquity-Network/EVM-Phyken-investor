@@ -63,12 +63,12 @@ const Waitlist: React.FC = () => {
       <Breadcrumb pageName={['Waitlist']} />
       <div className="max-w-3xl mx-auto p-8">
         <h1 className="text-2xl font-bold mb-4">
-          Let Rocket Forest Solar Farm know you are interested in investing in the Rocket Forest Solar Farm!
+          Let RF Solar Farm know you are interested in investing in the RF Solar Farm!
         </h1>
         <p className="mb-4">
-          In preparation for the Rocket Forest Solar Farm offering, Rocket Forest Solar Farm is collecting information
-          from potential investors. Let Rocket Forest Solar Farm know you are interested in investing in the Rocket
-          Forest Solar Farm to be among the first to know when the offering is live!
+          In preparation for the RF Solar Farm offering, RF Solar Farm is collecting information from potential
+          investors. Let RF Solar Farm know you are interested in investing in the Rocket Forest Solar Farm to be among
+          the first to know when the offering is live!
         </p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">

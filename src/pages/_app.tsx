@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title> Metaquity network: Investor </title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="shortcut icon" href="assets/login/metaquity-logo.png" />
+        <link rel="icon" href="/favico.png" sizes="any" />
       </Head>
       <WagmiProvider config={config}>
         <QueryClientProvider client={client}>
