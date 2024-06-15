@@ -49,7 +49,7 @@ const Header = (props: { sidebarOpen: string | boolean | undefined; setSidebarOp
           </button>
 
           <Link className="block flex-shrink-0 lg:hidden" href="/">
-            <Image width={32} height={32} src={'/images/logo/logo-icon.svg'} alt="Logo" />
+            <img width={110} height={70} src="https://phyken.network/logo.png" alt="Logo" />
           </Link>
         </div>
 

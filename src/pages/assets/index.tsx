@@ -40,7 +40,7 @@ const Assets: React.FC = () => {
 
           <div>
             <div className={`leading-relaxed ${openTab === 1 ? 'block' : 'hidden'}`}>
-              <div className="grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-2">
+              <div className="grid grid-cols-1 gap-7.5 sm:grid-cols-2 xl:grid-cols-3">
                 {activeAssets.length > 0 ? (
                   activeAssets.map((asset, key) => {
                     return <LiveAssetCard {...asset} key={key} />;

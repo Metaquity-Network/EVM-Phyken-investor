@@ -25,11 +25,18 @@ const LiveAssetCard: React.FC<LiveAssetCardProps> = ({
       className="bg-gray-2 rounded-xl text-black p-6 border-graydark hover:border hover:border-primary hover:cursor-pointer"
       onClick={redirect}
     >
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1509389928833-fe62aef36deb?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Asset Image"
+          className="rounded-t-xl w-full object-cover h-40"
+        />
+        <div className="absolute top-2 right-2 bg-primary text-white text-sm rounded-full h-6 w-18 text-center flex items-center justify-center">
+          Preview
+        </div>
+      </div>
       <div className="flex flex-row justify-between pt-4">
         <div className="text-2xl font-bold">{assetName}</div>
-        <div className={`${roundedFullStyles} border-primary`}>
-          <span>Preview</span>
-        </div>
       </div>
       <div className="text-xl font-thin">{shortDescription(assetDescription)}</div>
       <div className="flex pt-3 col-span-2 pb-4">

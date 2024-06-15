@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useAccount, useDisconnect } from 'wagmi';
 import { IconType } from 'react-icons/lib';
-import Image from 'next/image';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -82,12 +81,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   }, [sidebarExpanded]);
 
   const logout = async () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    await disconnect();
     const res = await axios.post('/api/auth/logout');
     if (res.status === 200) {
-      router.push('/login');
+      await disconnect();
+      localStorage.clear();
+      sessionStorage.clear();
+      router.push('/asset');
     }
   };
 
@@ -114,51 +113,44 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         </button>
       </div>
 
-      <div className="no-scrollbar overflow-y-auto duration-300 ease-linear">
-        <nav className="flex flex-col justify-between h-screen mt-5 py-4 px-4 lg:mt-9 lg:px-6">
-          <div>
-            <ul className="mb-6 flex flex-col gap-1.5">
-              {sidebarMenu.map((menu, i) => {
-                const isActive = pathname.startsWith(menu.pathname);
-                return (
-                  <li key={i}>
-                    <Link
-                      href={menu.pathname}
-                      className={`group relative flex items-center gap-2.5 px-4 py-2 font-medium text-black hover:text-white duration-300 ease-in-out hover:bg-black hover:rounded-full dark:hover:bg-primary ${
-                        isActive &&
-                        'bg-white text-primary dark:bg-meta-4 dark:text-white rounded-full dark:hover:bg-primary hover:text-black'
-                      }`}
-                    >
-                      <FaIcon icon={menu.icon} />
-                      {menu.name}
-                      {menu.notification ? (
-                        <span className="absolute right-4 block rounded-full bg-red py-1 px-2 text-xs font-medium text-white">
-                          {menu.notification}
-                        </span>
-                      ) : null}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-
-          <div className="py-25">
-            <ul className="mb-6 flex flex-col gap-1.5">
-              <li>
-                {isConnected ? (
-                  <button
-                    onClick={logout}
-                    className="group relative flex items-center gap-2.5 px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark hover:rounded-full dark:hover:bg-meta-4"
+      <div className="no-scrollbar overflow-y-auto duration-300 ease-linear flex flex-col justify-between flex-grow">
+        <nav className="flex flex-col mt-5 py-4 px-4 lg:mt-9 lg:px-6">
+          <ul className="mb-6 flex flex-col gap-1.5">
+            {sidebarMenu.map((menu, i) => {
+              const isActive = pathname.startsWith(menu.pathname);
+              return (
+                <li key={i}>
+                  <Link
+                    href={menu.pathname}
+                    className={`group relative flex items-center gap-2.5 px-4 py-2 font-semibold text-black hover:text-white duration-300 ease-in-out hover:bg-black hover:rounded-full dark:hover:bg-primary ${
+                      isActive &&
+                      'bg-white text-primary dark:bg-meta-4 dark:text-white rounded-full dark:hover:bg-primary hover:text-black'
+                    }`}
                   >
-                    <FaSignOutAlt />
-                    Logout
-                  </button>
-                ) : null}
-              </li>
-            </ul>
-          </div>
+                    <FaIcon icon={menu.icon} />
+                    {menu.name}
+                    {menu.notification ? (
+                      <span className="absolute right-4 block rounded-full bg-red py-1 px-2 text-xs font-medium text-white">
+                        {menu.notification}
+                      </span>
+                    ) : null}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </nav>
+        <div className="px-4 py-4">
+          {isConnected && (
+            <button
+              onClick={logout}
+              className="group relative flex items-center gap-2.5 px-4 py-2 font-bold text-white duration-300 ease-in-out hover:bg-graydark hover:rounded-full dark:hover:bg-meta-4"
+            >
+              <FaSignOutAlt />
+              Logout
+            </button>
+          )}
+        </div>
       </div>
     </aside>
   );

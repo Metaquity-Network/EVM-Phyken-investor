@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useAccount } from 'wagmi';
 import { useToast } from '@/src/hooks/useToast';
 import sampleAsset from '../../../../public/example/sample.json';
+import Cookies from 'js-cookie';
 
 interface TagProps {
   label: string;
@@ -60,7 +61,11 @@ const FractionalizeAsset: React.FC = () => {
 
   const interested = () => {
     if (isConnected) {
-      router.push('/waitlist');
+      if (Cookies.get('server-auth')) {
+        router.push('/waitlist');
+      } else {
+        showToast('Please sign the transaction', { type: 'info' });
+      }
     } else {
       showToast('Please connect your wallet', { type: 'error' });
     }
@@ -74,7 +79,7 @@ const FractionalizeAsset: React.FC = () => {
         <div className="bg-gray-100 rounded-lg overflow-hidden shadow-md">
           <div className="relative">
             <img
-              src="https://www.greenbiz.com/sites/default/files/styles/16_9_cropped/public/2022-09/FloatingSolar_setsoPhoto_sstock1470.jpg?itok=kdsSpnrx"
+              src="https://images.unsplash.com/photo-1509389928833-fe62aef36deb?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Solar Portfolio"
               className="w-full h-64 object-cover"
             />
@@ -89,7 +94,7 @@ const FractionalizeAsset: React.FC = () => {
                   label="WEBSITE"
                   color="gray"
                   icon={<FaExternalLinkAlt className="w-4 h-4" />}
-                  link={asset.companyWebsite}
+                  // link={asset.companyWebsite}
                 />
               </div>
             </div>

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '@/src/layout';
-import Breadcrumb from '@/src/components/Breadcrumbs/Breadcrumb';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useAccount } from 'wagmi';
@@ -15,6 +14,7 @@ const Waitlist: React.FC = () => {
   const router = useRouter();
   const { showToast } = useToast();
   const [country, setCountry] = useState('India');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -22,12 +22,12 @@ const Waitlist: React.FC = () => {
     formState: { errors, isValid },
     reset,
     setValue,
-  } = useForm();
+  } = useForm({ mode: 'onBlur' });
   const { isConnected } = useAccount();
 
   useEffect(() => {
     setValue('nationality', country);
-  }, [country]);
+  }, [country, setValue]);
 
   useEffect(() => {
     if (!isConnected) {
@@ -36,6 +36,8 @@ const Waitlist: React.FC = () => {
   }, [isConnected, router]);
 
   const onSubmit = async (data: any) => {
+    if (isSubmitting) return; // Prevent multiple submits
+    setIsSubmitting(true);
     try {
       const response = await axios.post('/api/invest/waitlist', data);
       if (response.status === 200) {
@@ -46,6 +48,8 @@ const Waitlist: React.FC = () => {
       }
     } catch (error: any) {
       showToast(error.response.data.message, { type: 'error' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -60,15 +64,14 @@ const Waitlist: React.FC = () => {
 
   return (
     <AdminLayout>
-      <Breadcrumb pageName={['Waitlist']} />
       <div className="max-w-3xl mx-auto p-8">
         <h1 className="text-2xl font-bold mb-4">
           Let RF Solar Farm know you are interested in investing in the RF Solar Farm!
         </h1>
         <p className="mb-4">
           In preparation for the RF Solar Farm offering, RF Solar Farm is collecting information from potential
-          investors. Let RF Solar Farm know you are interested in investing in the Rocket Forest Solar Farm to be among
-          the first to know when the offering is live!
+          investors. Let RF Solar Farm know you are interested in investing in the RF Solar Farm to be among the first
+          to know when the offering is live!
         </p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
@@ -129,7 +132,13 @@ const Waitlist: React.FC = () => {
                 id="investmentAmount"
                 type="number"
                 className="w-full p-2 border border-gray-300 rounded-md"
-                {...register('investmentAmount', { required: 'Investment amount is required' })}
+                {...register('investmentAmount', {
+                  required: 'Investment amount is required',
+                  min: {
+                    value: 100,
+                    message: 'Investment amount must be at least $100',
+                  },
+                })}
               />
               {errors.investmentAmount && (
                 <p className="text-red text-sm mt-1">{getErrorMessage(errors.investmentAmount)}</p>
@@ -177,8 +186,12 @@ const Waitlist: React.FC = () => {
               <p className="text-red text-sm mt-1">{getErrorMessage(errors.agreeToStoreData)}</p>
             )}
           </div>
-          <button type="submit" className="w-full p-2 bg-primary text-white font-bold rounded-md" disabled={!isValid}>
-            Submit
+          <button
+            type="submit"
+            className={`w-full p-2 text-white font-bold rounded-md ${!isValid ? 'bg-[#7FCE98]' : 'bg-primary'}`}
+            disabled={!isValid || isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit'}
           </button>
         </form>
       </div>

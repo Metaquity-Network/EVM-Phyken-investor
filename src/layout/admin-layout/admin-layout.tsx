@@ -11,15 +11,20 @@ export default function AdminLayout({ children }: PropsWithChildren) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { address, isConnected } = useAccount();
   const { data, signMessage } = useSignMessage();
-  const [signature, setSignature] = useState<`0x${string}`>();
+  const [signature, setSignature] = useState<`0x${string}` | null>(null);
   const { showToast } = useToast();
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  useEffect(() => {
+    const storedSignature = localStorage.getItem('signature');
+    if (storedSignature) {
+      setSignature(storedSignature as `0x${string}`);
+    }
+  }, []);
 
   useEffect(() => {
     const authenticate = async () => {
-      const storedSignature = localStorage.getItem('signature');
-      if (storedSignature) {
-        setSignature(storedSignature as `0x${string}`);
-      } else if (signature) {
+      if (signature && address && isAuthenticating) {
         try {
           const response = await axios.post('/api/auth/login', {
             address: address,
@@ -30,8 +35,10 @@ export default function AdminLayout({ children }: PropsWithChildren) {
           if (response.status === 200) {
             showToast('Authentication successful', { type: 'success' });
             localStorage.setItem('signature', signature);
+            setIsAuthenticating(false);
           } else {
             showToast('Authentication failed', { type: 'error' });
+            setIsAuthenticating(false);
           }
         } catch (error: any) {
           if (error.response && error.response.data && error.response.data.message) {
@@ -39,32 +46,41 @@ export default function AdminLayout({ children }: PropsWithChildren) {
           } else {
             showToast('Authentication failed: An unexpected error occurred', { type: 'error' });
           }
+          setIsAuthenticating(false);
         }
       }
     };
-    authenticate();
-  }, [signature, address]);
+
+    if (signature && isAuthenticating) {
+      authenticate();
+    }
+  }, [signature, address, isAuthenticating]);
 
   useEffect(() => {
     if (isConnected && address && !signature && !localStorage.getItem('signature')) {
       const message = `Sign this message to authenticate with Phyken. Address: ${address}`;
       signMessage({ message });
     }
-  }, [isConnected, address]);
+  }, [isConnected, address, signature]);
 
   useEffect(() => {
     if (data) {
       setSignature(data);
+      setIsAuthenticating(true);
     }
   }, [data]);
 
   return (
     <>
       <Head>
-        <title>Metaquity Network</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="shortcut icon" href="assets/login/metaquity-logo.png" />
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Phyken Network</title>
+        <link rel="preload" as="image" href="/favicon.png"></link>
+        <meta
+          name="description"
+          content="An RWA asset tokenization and asset fractionalization protocol, particularly emphasizing GRWA: renewable energies and solar power on the blockchain"
+        />
       </Head>
 
       <div className="dark:bg-boxdark-2 dark:text-bodydark">
