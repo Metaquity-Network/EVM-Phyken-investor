@@ -39,10 +39,10 @@ const Waitlist: React.FC = () => {
     if (isSubmitting) return; // Prevent multiple submits
     setIsSubmitting(true);
     try {
-      const response = await axios.post('/api/invest/waitlist', data);
+      const response = await axios.post('/api/waitlist/send-invite', data);
       if (response.status === 200) {
         showToast('Your details have been added to the waitlist', { type: 'success' });
-        reset();
+        router.push('coming-soon');
       } else {
         showToast(response.data.message, { type: 'error' });
       }
