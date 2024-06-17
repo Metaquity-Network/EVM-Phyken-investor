@@ -129,14 +129,13 @@ const Waitlist: React.FC = () => {
 
             <div>
               <label htmlFor="investmentAmount" className="block text-gray-700 font-bold mb-2">
-                How much would you plan on investing?*
+                How much would you plan on investing?
               </label>
               <input
                 id="investmentAmount"
                 type="number"
                 className="w-full p-2 border border-gray-300 rounded-md"
                 {...register('investmentAmount', {
-                  required: 'Investment amount is required',
                   min: {
                     value: 100,
                     message: 'Investment amount must be at least $100',
@@ -159,9 +158,8 @@ const Waitlist: React.FC = () => {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-md"
                 placeholder="@phykennetowrk"
-                {...register('telegramId', { required: 'Telegram Id is required' })}
+                {...register('telegramId')}
               />
-              {errors.telegramId && <p className="text-red text-sm mt-1">{getErrorMessage(errors.telegramId)}</p>}
             </div>
             <div>
               <label htmlFor="twitterId" className="block text-gray-700 font-bold mb-2">
@@ -172,9 +170,8 @@ const Waitlist: React.FC = () => {
                 type="text"
                 placeholder="@phyken_network"
                 className="w-full p-2 border border-gray-300 rounded-md"
-                {...register('twitterId', { required: 'Twitter id is required' })}
+                {...register('twitterId')}
               />
-              {errors.twitterId && <p className="text-red text-sm mt-1">{getErrorMessage(errors.twitterId)}</p>}
             </div>
           </div>
 
