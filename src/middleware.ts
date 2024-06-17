@@ -8,6 +8,8 @@ export default function middleware(request: NextRequest) {
   if (
     !pathname.startsWith('/assets') &&
     !pathname.startsWith('/waitlist') &&
+    !pathname.startsWith('/coming-soon') &&
+    !pathname.startsWith('/confirm-email') &&
     !pathname.startsWith('/_next') &&
     !pathname.startsWith('/api')
   ) {

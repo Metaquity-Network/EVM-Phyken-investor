@@ -20,14 +20,17 @@ const Waitlist: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors, isValid },
-    reset,
     setValue,
   } = useForm({ mode: 'onBlur' });
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
 
   useEffect(() => {
     setValue('nationality', country);
   }, [country, setValue]);
+
+  useEffect(() => {
+    setValue('walletAddress', address);
+  }, [address, setValue]);
 
   useEffect(() => {
     if (!isConnected) {
@@ -39,10 +42,10 @@ const Waitlist: React.FC = () => {
     if (isSubmitting) return; // Prevent multiple submits
     setIsSubmitting(true);
     try {
-      const response = await axios.post('/api/invest/waitlist', data);
+      const response = await axios.post('/api/waitlist/send-invite', data);
       if (response.status === 200) {
         showToast('Your details have been added to the waitlist', { type: 'success' });
-        reset();
+        router.push('coming-soon');
       } else {
         showToast(response.data.message, { type: 'error' });
       }
@@ -145,6 +148,36 @@ const Waitlist: React.FC = () => {
               )}
             </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label htmlFor="telegramId" className="block text-gray-700 font-bold mb-2">
+                Your Telegram Username
+              </label>
+              <input
+                id="telegramId"
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                placeholder="@phykennetowrk"
+                {...register('telegramId', { required: 'Telegram Id is required' })}
+              />
+              {errors.telegramId && <p className="text-red text-sm mt-1">{getErrorMessage(errors.telegramId)}</p>}
+            </div>
+            <div>
+              <label htmlFor="twitterId" className="block text-gray-700 font-bold mb-2">
+                Your Twitter Username
+              </label>
+              <input
+                id="twitterId"
+                type="text"
+                placeholder="@phyken_network"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                {...register('twitterId', { required: 'Twitter id is required' })}
+              />
+              {errors.twitterId && <p className="text-red text-sm mt-1">{getErrorMessage(errors.twitterId)}</p>}
+            </div>
+          </div>
+
           <div className="mb-4">
             <label htmlFor="additionalInfo" className="block text-gray-700 font-bold mb-2">
               Tell us more

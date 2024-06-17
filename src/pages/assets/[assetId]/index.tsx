@@ -55,10 +55,6 @@ const FractionalizeAsset: React.FC = () => {
   const activeClasses = 'bg-primary text-white hover:opacity-100';
   const inactiveClasses = 'bg-gray dark:bg-meta-4 text-black dark:text-white';
 
-  useEffect(() => {
-    console.log(router.query.assetId);
-  });
-
   const interested = () => {
     if (isConnected) {
       if (Cookies.get('server-auth')) {
