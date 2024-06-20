@@ -6,8 +6,10 @@ import axios from 'axios';
 import { useAccount, useSignMessage } from 'wagmi';
 import { useToast } from '@/src/hooks/useToast';
 import { ToastContainer } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 export default function AdminLayout({ children }: PropsWithChildren) {
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { address, isConnected } = useAccount();
   const { data, signMessage } = useSignMessage();
@@ -33,9 +35,9 @@ export default function AdminLayout({ children }: PropsWithChildren) {
           });
 
           if (response.status === 200) {
-            showToast('Authentication successful', { type: 'success' });
             localStorage.setItem('signature', signature);
             setIsAuthenticating(false);
+            router.push('/waitlist');
           } else {
             showToast('Authentication failed', { type: 'error' });
             setIsAuthenticating(false);

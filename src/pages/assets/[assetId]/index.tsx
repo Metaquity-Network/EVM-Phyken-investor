@@ -59,7 +59,8 @@ const FractionalizeAsset: React.FC = () => {
 
   const interested = () => {
     if (isConnected) {
-      if (Cookies.get('server-auth')) {
+      const signature = localStorage.getItem('signature');
+      if (signature) {
         router.push('/waitlist');
       } else {
         showToast('Please sign the transaction', { type: 'info' });

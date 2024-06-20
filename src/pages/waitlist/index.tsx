@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { AdminLayout } from '@/src/layout';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -15,6 +15,7 @@ const Waitlist: React.FC = () => {
   const { showToast } = useToast();
   const [country, setCountry] = useState('India');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const hasShownWarning = useRef(false); // Use useRef to persist the warning state
 
   const {
     register,
@@ -33,10 +34,14 @@ const Waitlist: React.FC = () => {
   }, [address, setValue]);
 
   useEffect(() => {
+    if (!hasShownWarning.current) {
+      showToast('Please complete the form to add to the waitlist', { type: 'warning' });
+      hasShownWarning.current = true; // Set the warning as shown
+    }
     if (!isConnected) {
       router.push('/assets');
     }
-  }, [isConnected, router]);
+  }, [isConnected, router, showToast]);
 
   const onSubmit = async (data: any) => {
     if (isSubmitting) return; // Prevent multiple submits
