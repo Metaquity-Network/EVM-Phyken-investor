@@ -4,7 +4,7 @@ import Head from 'next/head';
 import '@rainbow-me/rainbowkit/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
-import { celo } from 'wagmi/chains';
+import { berachainTestnet, celo } from 'wagmi/chains';
 import './../../styles/satoshi.css';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -12,7 +12,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 const config = getDefaultConfig({
   appName: 'Phyken Investor',
   projectId: 'metaquityApp',
-  chains: [celo],
+  chains: [berachainTestnet, celo],
   ssr: true,
 });
 
